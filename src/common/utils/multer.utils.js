@@ -1,11 +1,12 @@
-import multer, { diskStorage } from "multer";
+import multer, {diskStorage} from "multer";
 import fs from "node:fs";
-import { BadRequist } from "../../modules/auth";
+import { BadRequist } from "./errors.utils.js";
 export const uploadFiles = function (
-  alowwedType = ["image/png", "image/gif", "image/jpg"],
+  alowwedType = ["image/png", "image/gif", "image/jpeg"],
 ) {
   return multer({
     fileFilter: (req, file, cb) => {
+      console.log(file.mimetype);
       if (!alowwedType.includes(file.mimetype)) {
         return cb(new BadRequist("invalid format file uploaded"), false);
       }
@@ -16,8 +17,7 @@ export const uploadFiles = function (
 
     storage: diskStorage({
       destination: (req, file, cb) => {
-        if (!fs.existsSync(`uploads/${req.user._id}`))
-          fs.mkdirSync(`uploads/${req.user._id}`);
+        if (!fs.existsSync(`uploads/${req.user._id}`)){ fs.mkdirSync(`uploads/${req.user._id}`,{ recursive: true });}
         cb(null, `uploads/${req.user._id}`);
       },
       filename: (req, file, cb) => {

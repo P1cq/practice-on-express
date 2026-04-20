@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken';
 export const signToken= function(payload,key,options){
 return jwt.sign(payload,key,options);
 };
-export const verifyToken= function(token,key){
+export const verifyToken= function(token,key='12344123141241512414141231312'){
   const payload= jwt.verify(token,
-      key='12344123141241512414141231312');
+      key);
       return payload;
 };
 
