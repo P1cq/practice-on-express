@@ -1,102 +1,177 @@
 import { Router } from "express";
 import {
   checkUserExists,
-  createUser,
   SYS_ERRORS_MESSAGES,
   SYS_ROLES,
   NotFound,
   BadRequist,
-  hash,
+  ConfligExptions,
   compare,
-  encrypt,
   genarateTokens,
   verifyToken,
   uploadFiles,
+  otpRepo,
+  redisClint,
+  UnAouthrize,
+  env,
 } from "./index.js";
-import { isValidtion } from "../../middleware/index.js";
-import { signupSchema, loginSchema } from "./auth.validation.js";
-
+import { isValidtion, resendOtpLimiter } from "../../middleware/index.js";
+import { signupSchema, loginSchema, otpSchema } from "./auth.validation.js";
+import {
+  CheckAndCreateUser,
+  verifyEmail,
+  resendOtp,
+  googleAuth,
+  signWithGoogle,
+  refreshTokenService,
+  loginWithSystem,
+} from "./auth.service.js";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { getIO, emitToUser } from "../../db/webSocket.io.js"; // <-- updated import
 const router = Router();
+
 router.post(
   "/sign-up",
   uploadFiles().none(),
   isValidtion(signupSchema),
   async (req, res, next) => {
+    console.log(req.body);
+    const result = await CheckAndCreateUser(req.body);
 
-   console.log(req.body);
-    try {
-      await checkUserExists({
-        email: { $eq: req.body.email, $ne: null, $exists: true },
-      });
-      // prepare data
-      req.body.role = SYS_ROLES.user;
-      req.body.password = await hash(req.body.password, 11);
-
-      req.body.phoneNumber = encrypt(req.body.phoneNumber);
-      console.log(req.body.phoneNumber);
-
-      const result = await createUser(req.body);
-
-      return res.status(201).json({
-        success: true,
-        message: SYS_ERRORS_MESSAGES.user.userCreated,
-      });
-    } catch (error) {
-      throw new Error(error.message, error.cause);
-    }
+    if (!result)
+      throw new ConfligExptions(SYS_ERRORS_MESSAGES.user.failToCreate);
+    return res.status(201).json({
+      success: true,
+      message: SYS_ERRORS_MESSAGES.user.userCreated,
+      data: result,
+    });
   },
 );
 
-router.post("/login",uploadFiles().none(), isValidtion(loginSchema), async (req, res, next) => {
-  const { email, password } = req.body;
-console.log(email,password);
-  const userExists = await checkUserExists({
-    email: { $eq: email, $ne: null, $exists: true },
+router.post(
+  "/verifyEmail",
+  uploadFiles().none(),
+  isValidtion(otpSchema),
+  async (req, res, next) => {
+    const { email, otp } = req.body;
+
+    const created = await verifyEmail(email, otp);
+    if (!created) throw BadRequist(SYS_ERRORS_MESSAGES.user.failToUpdate);
+
+    await redisClint.del(email);
+    await redisClint.del(`${email}:otp`);
+
+    res.status(201).json({
+      success: true,
+      message: SYS_ERRORS_MESSAGES.user.userCreated,
+      user: created,
+    });
+  },
+);
+
+router.post(
+  "/re-send-otp",
+  uploadFiles().none(),
+  resendOtpLimiter,
+  async (req, res, next) => {
+    await resendOtp(req.body);
+
+    res.status(200).json({
+      success: true,
+      message: SYS_ERRORS_MESSAGES.otp.successSendOtp,
+    });
+  },
+);
+
+router.post(
+  "/login",
+  uploadFiles().none(),
+  isValidtion(loginSchema),
+  async (req, res, next) => {
+    const { _id, refreshToken, accesToken } = await loginWithSystem(req.body);
+
+    // حاول تبعث حدث على WebSocket بعد ال login
+    try {
+      const ok = emitToUser(_id, "user:login", {
+        message: "user_logged_in",
+        userId: _id,
+      });
+      if (ok) console.log("Emitted WebSocket login event for user:", JSON.stringify(_id));
+      else
+        console.log(
+          "WebSocket not initialized yet, emit skipped for user:",
+          _id,
+        );
+    } catch (err) {
+      console.log("WebSocket emit failed:", err.message);
+    }
+
+    res.status(200).json({
+      message: SYS_ERRORS_MESSAGES.user.sucssesToLogin,
+      succes: true,
+      data: { accesToken, refreshToken, _id },
+    });
+  },
+);
+
+router.get("/refresh-token", async (req, res, next) => {
+  const { authorization } = req.headers;
+
+  const { accesToken, refreshToken } = await refreshTokenService(authorization);
+
+  const payload = await verifyToken(refreshToken, env.refreshToken);
+
+  await redisClint.set(`userRefreshToken:${payload.sub}`, refreshToken, {
+    EX: payload.exp - Math.floor(Date.now() / 1000),
   });
-console.log(userExists);
-  const match = await compare(
-    password,
-    userExists?.password ||
-      "$2b$11$kBExWF1W9QjukTnLVvqdDuzoRujkFk/LiCfxxeTRE0K3vGr8f9sHW",
-  );
-console.log(match);
-  if (!userExists) throw new BadRequist(SYS_ERRORS_MESSAGES.user.failToLogin);
-  if (!match) throw new BadRequist(SYS_ERRORS_MESSAGES.user.failToLogin);
 
-  //   userExists.password= undefined;
-
-  // genrate token
-  const { refreshToken, accesToken } = genarateTokens({
-    sub: userExists._id,
-    role: userExists.role,
-  });
-
-  res.status(200).json({
-    message: "login succefully",
+  res.status(201).json({
     succes: true,
+    message: "refreshToken created succefully",
     data: { accesToken, refreshToken },
   });
 });
 
-router.get("/refresh-token", (req, res, next) => {
-  const { authorization } = req.headers;
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  }),
+);
 
-  //  const payload= jwt.verify(authorization,
-  //     "223rryrt56wew28irjdkg019238uriplxasdf01923j312hf")
-  const payload = verifyToken(
-    authorization,
-    "223rryrt56wew28irjdkg019238uriplxasdf01923j312hf",
-  );
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+  }),
+  async (req, res, next) => {
+    console.log(req.user);
+    const { accesToken, refreshToken } = await googleAuth(req.user);
 
-  console.log(payload);
-  delete payload.exp;
-  delete payload.iat;
-  const { accesToken, refreshToken } = genarateTokens(payload);
+    return res.status(201).json({
+      succes: true,
+      message: SYS_ERRORS_MESSAGES.user.sucssesToLogin,
+      accesToken,
+      refreshToken,
+    });
+  },
+);
 
-  res.status(201).json({
+router.post("/sign-with-google", async (req, res, next) => {
+  const signWithG = await signWithGoogle(req.body);
+  if (!signWithG) throw new BadRequist("fail to genrate tokens");
+
+  const { accesToken, refreshToken, checkExist } = signWithG;
+
+  return res.status(201).json({
     succes: true,
-    message: "refresh token created succefully",
-    data: { accesToken, refreshToken },
+    message: SYS_ERRORS_MESSAGES.user.sucssesToLogin,
+    data: {
+      accesToken,
+      refreshToken,
+      checkExist,
+    },
   });
 });
 

@@ -1,5 +1,8 @@
-export * from './errors.utils.js';
-export * from './bcrypt.utlis.js';
-export * from './encrypt.utlis.js';
-export * from './jwt.utlis.js';
-export *from './multer.utils.js';
+export * from "./errors.utils.js";
+export * from "./bcrypt.utlis.js";
+export * from "./encrypt.utlis.js";
+export * from "./jwt.utlis.js";
+export * from "./multer.utils.js";
+export * from "./nodemailer.utils.js";
+export * from "../index.js";
+export * from "./otp_sendEmail.js";

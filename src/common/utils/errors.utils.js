@@ -1,37 +1,37 @@
-
 export class ConfligExptions extends Error {
-
-constructor(message){
-
-    super(message,{cause:409});
-};
-};
+  constructor(message) {
+    super(message, { cause: 409 });
+  }
+}
 
 export class NotFound extends Error {
-
-constructor(message){
-
-    super(message,{cause:404});
-};
-};
-
+  constructor(message) {
+    super(message, { cause: 404 });
+  }
+}
 
 export class BadRequist extends Error {
-details;
-constructor(message,details=[]){
-
-    super(message,{cause:400});
-this.details=details;
-   
-};
-};
-
+  details;
+  constructor(message, details = []) {
+    super(message, { cause: 400 });
+    this.details = details;
+  }
+}
 
 export class UnAouthrize extends Error {
+  constructor(message) {
+    super(message, { cause: 401 });
+  }
+}
 
-constructor(message){
+export class Unsupported extends Error {
+  constructor(message) {
+    super(message, { cause: 415 });
+  }
+}
 
-    super(message,{cause:401});
-};
-};
-
+export class Unprocessable extends Error {
+  constructor(message) {
+    super(message, { cause: 422 });
+  }
+}

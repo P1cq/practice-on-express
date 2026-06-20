@@ -1,4 +1,3 @@
-import {runningApp} from './app.controller.js';
-
+import { runningApp } from "./app.controller.js";
 
 runningApp();

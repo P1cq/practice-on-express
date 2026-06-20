@@ -1,24 +1,33 @@
+import jwt from "jsonwebtoken";
+import crypto from "node:crypto";
+import { env } from './index.js';
+export const signToken = function (payload, key, options) {
+  payload.jti = crypto.randomBytes(12).toString("hex");
 
-import jwt from 'jsonwebtoken';
-
-export const signToken= function(payload,key,options){
-return jwt.sign(payload,key,options);
+  return jwt.sign(payload, key, options);
 };
-export const verifyToken= function(token,key='12344123141241512414141231312'){
-  const payload= jwt.verify(token,
-      key);
-      return payload;
+export const verifyToken = function (
+  token,
+  key = "12344123141241512414141231312",
+) {
+  const payload = jwt.verify(token, key);
+  return payload;
 };
 
-export const genarateTokens=function (payload){
+export const genarateTokens = function (payload) {
+  const accesToken = signToken(
+    payload,
+    env.accessToken,
+    { expiresIn: "24h" },
+  );
 
-  const accesToken= signToken(payload,"12i47281y647d18d823hr1232144kksklslske990921d1",
-  {expiresIn:'1h'})
+  const refreshToken = signToken(
+    payload,
+   env.refreshToken,
+    {
+      expiresIn: "1y",
+    },
+  );
 
-const refreshToken= signToken(payload,"223rryrt56wew28irjdkg019238uriplxasdf01923j312hf",
-  {
-  expiresIn:'1y'
-});
-
-return {refreshToken,accesToken}
+  return { refreshToken, accesToken };
 };

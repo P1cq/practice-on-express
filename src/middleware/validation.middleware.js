@@ -1,7 +1,7 @@
 // aplly validation
 // shema and data coming
 import joi from "joi";
-import { BadRequist, SYS_GENDAR, SYS_ROLES } from "./index.js";
+import { BadRequist, SYS_GENDAR, SYS_ROLES, Unprocessable } from "./index.js";
 export const isValidtion = (schema) => {
   return (req, res, next) => {
     const validation = schema.validate(req.body, { abortEarly: false });
@@ -12,7 +12,10 @@ export const isValidtion = (schema) => {
       });
       console.log(messageError);
 
-      throw new BadRequist("validate feiled", messageError);
+      throw new Unprocessable(
+        "The provided data failed validation checks",
+        messageError,
+      );
     }
     next();
   };

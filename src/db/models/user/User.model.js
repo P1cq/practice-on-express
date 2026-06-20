@@ -18,7 +18,14 @@ const schema = new Schema(
       trim: true,
       lowercase: true,
     },
-    password: { type: String, required: true },
+    provider: { type: String, enum: ["google", "system"], default: "system" },
+    password: {
+      type: String,
+      required: function () {
+        if (this.provider === "google") return false;
+        return true;
+      },
+    },
     gendar: { type: Number, enum: Object.values(SYS_GENDAR) },
     role: {
       type: Number,
@@ -26,13 +33,16 @@ const schema = new Schema(
       default: SYS_ROLES.user,
     },
     phoneNumber: {
-      type: { iv: String, algorithm: String ,number:String},
+      type: { iv: String, algorithm: String, number: String },
       required: function () {
         if (this.email) return false;
         return true;
       },
     },
-    
+    profileImage: String,
+
+    is_verified: { type: Boolean, default: true },
+    creadintialsAt: { type: Date, default: Date.now() },
   },
   {
     timestamps: true,
