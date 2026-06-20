@@ -1,6 +1,6 @@
-# practic on Sarihnaa Backend - Secure & Scalable Anonymous Messaging API
+# practic on SARAHA Backend - Secure & Scalable Anonymous Messaging API
 
-Welcome to the backend repository of **Sarihna**, a high-performance, secure, and production-ready anonymous messaging platform. This backend is engineered with a focus on robust security, token-based session management, optimized caching, and strictly validated architectures.
+Welcome to the backend repository of **SARAHA**, a high-performance, secure, and production-ready anonymous messaging platform. This backend is engineered with a focus on robust security, token-based session management, optimized caching, and strictly validated architectures.
 
 ---
 
