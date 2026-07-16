@@ -7,14 +7,17 @@ import {
   checkUserAndGetProfile,
 } from "./user.service.js";
 import { BadRequist, SYS_ERRORS_MESSAGES } from "../auth/index.js";
-import { decrypt, uploadFiles } from "./index.js";
+import { decrypt, uploadFiles, clearAuthCookies } from "./index.js";
 import { isAuthentication, fileValidation, NotFound } from "../../middleware/index.js";
 
 const router = Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const usersData = await getAllUsers({ email: { $exists: true } });
+    const usersData = await getAllUsers(
+      { email: { $exists: true } },
+      { name: 1, email: 1, profileImage: 1 },
+    );
 
     res.status(200).json({
       success: true,
@@ -66,6 +69,8 @@ router.patch(
 
     if (!logOutFromAll) throw BadRequist("Creaditials not updated");
 
+    clearAuthCookies(res);
+
     res.status(200).json({
       success: true,
       message: SYS_ERRORS_MESSAGES.user.userUpdated,
@@ -80,6 +85,8 @@ router.post(
   async (req, res, next) => {
     console.log(req.payload);
     await logout(req.payload, req.user);
+
+    clearAuthCookies(res);
 
     res.status(200).json({
       success: true,

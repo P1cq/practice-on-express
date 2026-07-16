@@ -105,8 +105,10 @@ export const CheckAndCreateUser = async function (body) {
   body.password = await hash(body.password, 11);
   body.rePassword= body.password;
 
-  body.phoneNumber = encrypt(body.phoneNumber);
-  console.log(body.phoneNumber);
+  if (body.phoneNumber) {
+    body.phoneNumber = encrypt(body.phoneNumber);
+    console.log(body.phoneNumber);
+  }
 
   await createOtpAndSendEmail(body);
 

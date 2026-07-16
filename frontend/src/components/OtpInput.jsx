@@ -45,7 +45,7 @@ export default function OtpInput({ length = 6, value, onChange }) {
   };
 
   return (
-    <div className="flex gap-2 sm:gap-3 justify-center" dir="ltr">
+    <div className="flex gap-2 sm:gap-3 justify-center">
       {Array.from({ length }).map((_, i) => (
         <input
           key={i}
@@ -59,7 +59,7 @@ export default function OtpInput({ length = 6, value, onChange }) {
           onChange={(e) => handleChange(i, e)}
           onKeyDown={(e) => handleKeyDown(i, e)}
           onPaste={handlePaste}
-          className="otp-box text-sage-900"
+          className="otp-box"
         />
       ))}
     </div>

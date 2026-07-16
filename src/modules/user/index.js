@@ -15,3 +15,4 @@ export {
   redisClint
 } from "../index.js";
 export {logout,updateCreadintials}from './user.service.js';
+export { clearAuthCookies } from "../../common/utils/index.js";

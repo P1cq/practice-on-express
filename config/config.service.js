@@ -7,6 +7,7 @@ config({ path: path.resolve("./config/.env.dev") });
 
 // export const port = process.env.PORT ;
 export const env = {
+  nodeEnv: process.env.NODE_ENV || "development",
   port: process.env.PORT,
   MONGO_URL: process.env.MONGO_URL,
   DB_NAME: process.env.DB_NAME,

@@ -1,0 +1,9 @@
+# Netlify-style header rules. Applied automatically if deployed to Netlify;
+# ignored by other hosts. Replace <YOUR_API_ORIGIN> with the deployed backend's
+# origin (e.g. https://api.example.com) — it can't be templated here the way
+# index.html's meta CSP is, since this file is copied verbatim into the build.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: <YOUR_API_ORIGIN> https://lh3.googleusercontent.com; connect-src 'self' <YOUR_API_ORIGIN> https://accounts.google.com; frame-src https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';

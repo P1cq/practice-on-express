@@ -6,6 +6,7 @@ import passport from "passport";
 import "../config/passport.config.js";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { fileURLToPath } from "node:url";
@@ -37,7 +38,7 @@ export const runningApp = function () {
 
   connectDb();
   redisConnection();
-  app.use(helmet());
+  app.use(helmet({ frameguard: { action: "deny" } }));
   webSocketConnect(io);
   app.use(
     cors({
@@ -47,6 +48,7 @@ export const runningApp = function () {
   );
   app.use(express.static(join(__dirname, "public")));
   app.use(express.json());
+  app.use(cookieParser());
   app.use("/uploads", express.static("uploads"));
   app.use(passport.initialize());
   app.use("/auth", authRouter);
@@ -58,11 +60,12 @@ export const runningApp = function () {
       err.message = "token invalid, please login";
       err.cause = 401;
     }
+    const isDev = env.nodeEnv !== "production";
     res.status(err.cause || 500).json({
       succes: false,
       message: err.message,
       details: err.details,
-      stack: err.stack,
+      ...(isDev ? { stack: err.stack } : {}),
     });
   });
 

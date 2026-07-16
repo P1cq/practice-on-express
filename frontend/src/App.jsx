@@ -14,6 +14,7 @@ import MessageDetail from './pages/MessageDetail';
 import SendMessage from './pages/SendMessage';
 import Profile from './pages/Profile';
 import Users from './pages/Users';
+import OAuthCallback from './pages/OAuthCallback';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/oauth-callback" element={<OAuthCallback />} />
             <Route path="/users" element={<Users />} />
             <Route path="/u/:userId" element={<SendMessage />} />
 

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { io } from 'socket.io-client';
 import { API_URL } from '../api/client';
+import { getAccessToken } from '../api/tokenStore';
 import { useAuth } from './AuthContext';
 
 const NotificationContext = createContext(null);
@@ -29,7 +30,7 @@ export function NotificationProvider({ children }) {
       return;
     }
 
-    const token = localStorage.getItem('accessToken');
+    const token = getAccessToken();
     const newSocket = io(API_URL, {
       auth: { token },
       withCredentials: true,

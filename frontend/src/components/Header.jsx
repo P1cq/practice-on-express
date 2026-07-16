@@ -1,11 +1,12 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
 import { logout } from '../api/auth';
 
-export default function Header({ variant = 'home' }) {
-  const { isAuthenticated, user, logoutUser } = useAuth();
+export default function Header() {
+  const { isAuthenticated, logoutUser } = useAuth();
   const { unreadCount, markAllRead, notifications } = useNotifications();
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -17,38 +18,41 @@ export default function Header({ variant = 'home' }) {
     } catch {
       /* ignore */
     }
-    logoutUser();
-    navigate('/');
+    // flushSync forces the auth-state update to commit (and, if we're on a
+    // protected route, ProtectedRoute's own redirect-to-/login to resolve)
+    // before we navigate — otherwise that redirect can land after ours and
+    // silently override the intended destination.
+    flushSync(() => {
+      logoutUser();
+    });
+    navigate('/', { replace: true });
   };
 
   const navClass = ({ isActive }) =>
-    `text-sm tracking-wide transition-colors hover:text-white ${
-      isActive ? 'text-white font-medium' : 'text-sage-200'
+    `text-sm tracking-wide transition-colors hover:text-paper-50 ${
+      isActive ? 'text-paper-50 font-medium' : 'text-pine-200'
     }`;
 
-  const isHome = variant === 'home';
-
   return (
-    <header
-      className={`relative z-50 ${
-        isHome ? 'bg-transparent' : 'bg-sage-950/80 backdrop-blur-md border-b border-white/5'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+    <header className="relative z-50 pine-panel border-b border-black/20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-[4.5rem]">
           <Link
             to="/"
-            className="font-display text-lg md:text-xl text-sage-100 tracking-wider lowercase"
+            className="font-display italic text-xl md:text-2xl text-paper-50 tracking-wide"
           >
             sarihnaa
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8 lg:gap-10">
+          <nav className="hidden md:flex items-center gap-7 lg:gap-9">
             <NavLink to="/" end className={navClass}>
               Home
             </NavLink>
             <NavLink to="/about" className={navClass}>
               About
+            </NavLink>
+            <NavLink to="/users" className={navClass}>
+              Find someone
             </NavLink>
             {isAuthenticated ? (
               <>
@@ -65,11 +69,11 @@ export default function Header({ variant = 'home' }) {
                       setNotifOpen(!notifOpen);
                       if (!notifOpen) markAllRead();
                     }}
-                    className="relative p-2 rounded-full hover:bg-white/10 transition-colors"
+                    className="relative p-2 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
                     aria-label="Notifications"
                   >
                     <svg
-                      className="w-5 h-5 text-sage-100"
+                      className="w-5 h-5 text-paper-100"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -82,30 +86,30 @@ export default function Header({ variant = 'home' }) {
                       />
                     </svg>
                     {unreadCount > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center notification-pulse">
+                      <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-ochre-600 text-paper-50 text-[10px] font-bold rounded-full flex items-center justify-center notification-pulse">
                         {unreadCount > 9 ? '9+' : unreadCount}
                       </span>
                     )}
                   </button>
 
                   {notifOpen && (
-                    <div className="absolute left-0 mt-2 w-80 bg-sage-950 border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
-                      <div className="px-4 py-3 border-b border-white/10">
-                        <p className="text-sm font-medium">الإشعارات</p>
+                    <div className="absolute right-0 mt-3 w-80 card-paper rounded-2xl shadow-2xl overflow-hidden">
+                      <div className="px-4 py-3 border-b border-paper-200">
+                        <p className="text-sm font-semibold text-ink-900">Notifications</p>
                       </div>
                       <div className="max-h-64 overflow-y-auto">
                         {notifications.length === 0 ? (
-                          <p className="px-4 py-6 text-sm text-sage-400 text-center">
-                            لا توجد إشعارات
+                          <p className="px-4 py-6 text-sm text-ink-500 text-center">
+                            No notifications yet
                           </p>
                         ) : (
                           notifications.slice(0, 10).map((n, i) => (
                             <div
                               key={i}
-                              className="px-4 py-3 border-b border-white/5 hover:bg-white/5"
+                              className="px-4 py-3 border-b border-paper-200 last:border-0 hover:bg-paper-100"
                             >
-                              <p className="text-sm font-medium">{n.title}</p>
-                              <p className="text-xs text-sage-400 mt-1 truncate">
+                              <p className="text-sm font-medium text-ink-900">{n.title}</p>
+                              <p className="text-xs text-ink-500 mt-1 truncate">
                                 {n.message?.content}
                               </p>
                             </div>
@@ -118,7 +122,7 @@ export default function Header({ variant = 'home' }) {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="text-sm text-sage-200 hover:text-white transition-colors"
+                  className="text-sm text-pine-200 hover:text-paper-50 transition-colors cursor-pointer"
                 >
                   Logout
                 </button>
@@ -130,9 +134,9 @@ export default function Header({ variant = 'home' }) {
                 </NavLink>
                 <Link
                   to="/signup"
-                  className="px-5 py-2.5 bg-sage-100 text-sage-900 rounded-full text-sm font-medium hover:bg-white transition-colors"
+                  className="px-5 py-2.5 bg-paper-50 text-pine-900 rounded-full text-sm font-semibold hover:bg-white transition-colors"
                 >
-                  get started
+                  Get started
                 </Link>
               </>
             )}
@@ -140,11 +144,11 @@ export default function Header({ variant = 'home' }) {
 
           <button
             type="button"
-            className="md:hidden p-2 rounded-lg hover:bg-white/10"
+            className="md:hidden p-2 rounded-lg hover:bg-white/10 cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Menu"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-6 h-6 text-paper-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {menuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -162,6 +166,9 @@ export default function Header({ variant = 'home' }) {
             <NavLink to="/about" className={navClass} onClick={() => setMenuOpen(false)}>
               About
             </NavLink>
+            <NavLink to="/users" className={navClass} onClick={() => setMenuOpen(false)}>
+              Find someone
+            </NavLink>
             {isAuthenticated ? (
               <>
                 <NavLink to="/dashboard" className={navClass} onClick={() => setMenuOpen(false)}>
@@ -170,7 +177,7 @@ export default function Header({ variant = 'home' }) {
                 <NavLink to="/profile" className={navClass} onClick={() => setMenuOpen(false)}>
                   Profile
                 </NavLink>
-                <button type="button" onClick={handleLogout} className="text-sm text-sage-200 text-right">
+                <button type="button" onClick={handleLogout} className="text-sm text-pine-200 text-left cursor-pointer">
                   Logout
                 </button>
               </>
@@ -181,10 +188,10 @@ export default function Header({ variant = 'home' }) {
                 </NavLink>
                 <Link
                   to="/signup"
-                  className="inline-block text-center px-5 py-2.5 bg-sage-100 text-sage-900 rounded-full text-sm font-medium"
+                  className="inline-block text-center px-5 py-2.5 bg-paper-50 text-pine-900 rounded-full text-sm font-semibold"
                   onClick={() => setMenuOpen(false)}
                 >
-                  get started
+                  Get started
                 </Link>
               </>
             )}

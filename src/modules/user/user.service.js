@@ -15,9 +15,9 @@ export const checkUserExists = async function (email) {
   return await userRepo.getOne(email);
 };
 
-export const getAllUsers = async function (filter) {
+export const getAllUsers = async function (filter, projection) {
   try {
-    return await userRepo.getAll(filter);
+    return await userRepo.getAll(filter, projection);
   } catch (error) {
     throw new ConfligExptions(SYS_ERRORS_MESSAGES.user.alreadyExists);
   }

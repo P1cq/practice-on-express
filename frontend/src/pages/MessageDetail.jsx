@@ -4,6 +4,7 @@ import { getMessage, deleteMessage } from '../api/messages';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { API_URL } from '../api/client';
+import { safeUrl } from '../utils/safeUrl';
 
 export default function MessageDetail() {
   const { id } = useParams();
@@ -29,40 +30,40 @@ export default function MessageDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-sage-900 flex flex-col">
+    <div className="min-h-screen bg-paper-100 flex flex-col">
       <Header />
 
-      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-10 md:py-14 paper-grain">
         <div className="max-w-2xl mx-auto">
           <Link
             to="/dashboard"
-            className="text-sm text-sage-400 hover:text-white flex items-center gap-1 mb-6"
+            className="text-sm text-ink-500 hover:text-pine-800 flex items-center gap-1 mb-6"
           >
             <span>&lt;</span> Back to inbox
           </Link>
 
           {loading ? (
             <div className="flex justify-center py-20">
-              <div className="w-10 h-10 border-3 border-sage-100 border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-3 border-pine-700 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : error ? (
-            <div className="text-center py-12 text-red-400">{error}</div>
+            <div className="text-center py-12 text-rose-700">{error}</div>
           ) : (
-            <div className="bg-sage-800/60 border border-white/5 rounded-3xl p-6 md:p-8">
+            <div className="note-card p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
-                <span className="text-xs text-sage-400">
-                  {new Date(message.createdAt).toLocaleString('ar-EG')}
+                <span className="text-xs text-ink-400">
+                  {new Date(message.createdAt).toLocaleString('en-US')}
                 </span>
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className="text-xs text-red-400 hover:text-red-300"
+                  className="text-xs text-rose-700 hover:text-rose-800 cursor-pointer"
                 >
                   Delete
                 </button>
               </div>
 
-              <p className="text-lg text-sage-100 leading-relaxed whitespace-pre-wrap">
+              <p className="font-display text-xl text-ink-900 leading-relaxed whitespace-pre-wrap">
                 {message.content}
               </p>
 
@@ -71,13 +72,13 @@ export default function MessageDetail() {
                   {message.attachments.map((att, i) => (
                     <a
                       key={i}
-                      href={`${API_URL}/${att}`}
+                      href={safeUrl(`${API_URL}/${att}`)}
                       target="_blank"
                       rel="noreferrer"
-                      className="block rounded-xl overflow-hidden border border-white/10"
+                      className="block rounded-xl overflow-hidden border border-paper-300"
                     >
                       <img
-                        src={`${API_URL}/${att}`}
+                        src={safeUrl(`${API_URL}/${att}`)}
                         alt={`Attachment ${i + 1}`}
                         className="w-full h-40 object-cover"
                       />
@@ -86,7 +87,7 @@ export default function MessageDetail() {
                 </div>
               )}
 
-              <div className="mt-8 pt-6 border-t border-white/5 text-sm text-sage-400 space-y-1">
+              <div className="mt-8 pt-6 border-t border-paper-200 text-sm text-ink-500 space-y-1">
                 <p>From: {message.senderId?.name || 'Anonymous'}</p>
                 <p>To: {message.resiverId?.name || 'Unknown'}</p>
               </div>

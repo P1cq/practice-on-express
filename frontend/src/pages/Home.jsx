@@ -2,165 +2,116 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-function ParrotsIllustration() {
+function FoldedNoteIllustration() {
   return (
-    <svg
-      viewBox="0 0 400 280"
-      className="w-full max-w-md mx-auto drop-shadow-lg"
-      aria-hidden="true"
-    >
-      <ellipse cx="200" cy="260" rx="120" ry="12" fill="rgba(0,0,0,0.15)" />
-      <path
-        d="M60 200 Q200 180 340 200"
-        stroke="#c4b89a"
-        strokeWidth="6"
-        fill="none"
-        strokeLinecap="round"
-      />
-      <path
-        d="M80 200 Q200 160 320 200"
-        stroke="#a89878"
-        strokeWidth="4"
-        fill="none"
-        strokeLinecap="round"
-      />
-      <g transform="translate(130, 120)">
-        <ellipse cx="40" cy="70" rx="35" ry="45" fill="#4a8c3f" />
-        <ellipse cx="40" cy="75" rx="28" ry="38" fill="#5da84f" />
-        <circle cx="55" cy="45" r="22" fill="#4a8c3f" />
-        <circle cx="58" cy="42" r="18" fill="#5da84f" />
-        <circle cx="65" cy="38" r="4" fill="#1a1a1a" />
-        <circle cx="66" cy="37" r="1.5" fill="white" />
-        <path d="M72 42 L85 38 L72 48 Z" fill="#e8a020" />
-        <path d="M15 60 Q-5 40 5 20 Q15 35 25 50" fill="#3d7a35" />
-        <path d="M60 110 Q30 130 20 160" stroke="#3d7a35" strokeWidth="3" fill="none" />
+    <svg viewBox="0 0 420 340" className="w-full max-w-sm mx-auto" aria-hidden="true">
+      <ellipse cx="210" cy="300" rx="140" ry="16" fill="rgba(33,31,22,0.08)" />
+
+      {/* envelope body */}
+      <rect x="70" y="90" width="280" height="180" rx="10" fill="#f4eede" stroke="#d8caa4" strokeWidth="2" />
+      {/* envelope flap shadow */}
+      <path d="M70 100 L210 210 L350 100" fill="none" stroke="#d8caa4" strokeWidth="2" />
+      <path d="M72 98 L210 205 L348 98 L348 100 L210 210 L72 100 Z" fill="rgba(33,31,22,0.04)" />
+
+      {/* the note peeking out, top */}
+      <g transform="translate(130 20) rotate(-4 80 80)">
+        <rect x="0" y="0" width="160" height="120" rx="6" fill="#fbf8f0" stroke="#c2b087" strokeWidth="1.5" />
+        <line x1="20" y1="30" x2="140" y2="30" stroke="#e0d3ae" strokeWidth="2" />
+        <line x1="20" y1="48" x2="140" y2="48" stroke="#e0d3ae" strokeWidth="2" />
+        <line x1="20" y1="66" x2="100" y2="66" stroke="#e0d3ae" strokeWidth="2" />
       </g>
-      <g transform="translate(210, 100)">
-        <ellipse cx="40" cy="75" rx="32" ry="42" fill="#3d7a35" />
-        <ellipse cx="40" cy="78" rx="26" ry="35" fill="#4a8c3f" />
-        <circle cx="52" cy="48" r="20" fill="#3d7a35" />
-        <circle cx="54" cy="45" r="16" fill="#4a8c3f" />
-        <circle cx="60" cy="42" r="3.5" fill="#1a1a1a" />
-        <circle cx="61" cy="41" r="1.2" fill="white" />
-        <path d="M66 46 L78 42 L66 52 Z" fill="#e8a020" />
-        <path d="M70 55 Q90 35 85 15 Q78 30 72 48" fill="#2d5a28" />
-        <path d="M55 115 Q80 135 90 165" stroke="#2d5a28" strokeWidth="3" fill="none" />
-      </g>
+
+      {/* wax seal */}
+      <circle cx="210" cy="180" r="26" fill="#235a4d" />
+      <circle cx="210" cy="180" r="26" fill="none" stroke="#143530" strokeWidth="1.5" />
+      <path
+        d="M210 168 L215 178 L226 179 L217.5 186 L220 197 L210 191 L200 197 L202.5 186 L194 179 L205 178 Z"
+        fill="#e0ede8"
+      />
     </svg>
   );
 }
 
-function KnittingIllustration() {
-  return (
-    <svg viewBox="0 0 200 200" className="w-32 h-32 mx-auto" aria-hidden="true">
-      <circle cx="100" cy="40" r="20" fill="#6b8060" />
-      <path d="M85 35 Q100 20 115 35" stroke="#a8b89e" strokeWidth="2" fill="none" />
-      <rect x="60" y="70" width="80" height="90" rx="8" fill="#4a8c3f" />
-      <path
-        d="M80 100 A20 20 0 0 1 120 100 A20 20 0 0 1 80 100"
-        fill="none"
-        stroke="#ececec"
-        strokeWidth="3"
-      />
-      <path
-        d="M95 100 L100 90 L105 100 L110 90 L105 110 L100 120 L95 110 L90 100 Z"
-        fill="none"
-        stroke="#ececec"
-        strokeWidth="2"
-      />
-      <line x1="50" y1="130" x2="70" y2="110" stroke="#c4b89a" strokeWidth="3" />
-      <line x1="150" y1="130" x2="130" y2="110" stroke="#c4b89a" strokeWidth="3" />
-    </svg>
-  );
-}
-
-function PaperPlaneIllustration() {
-  return (
-    <svg viewBox="0 0 200 200" className="w-32 h-32 mx-auto" aria-hidden="true">
-      <path
-        d="M30 120 Q80 100 130 80 Q160 70 170 60"
-        stroke="#a8b89e"
-        strokeWidth="2"
-        fill="none"
-        strokeDasharray="6 4"
-      />
-      <path d="M140 50 L170 60 L150 80 L155 65 Z" fill="#3d5236" />
-      <path d="M140 50 L120 90 L155 65 Z" fill="#4a6354" />
-      <path d="M140 50 L100 70 L120 90 Z" fill="#5a6e52" opacity="0.7" />
-    </svg>
-  );
-}
+const FEATURES = [
+  {
+    title: 'Written, not spoken',
+    body: 'Some truths come out easier with a pen than a voice. Take your time — there is no reply expected in the moment.',
+  },
+  {
+    title: 'Delivered without a name',
+    body: 'Your identity never travels with the note. Not to us, not to the person reading it.',
+  },
+  {
+    title: 'Kept until they’re ready',
+    body: 'Every note lands safely in their inbox and waits — read when the moment is right, not before.',
+  },
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-sage-900 flex flex-col">
-      <Header variant="home" />
+    <div className="min-h-screen bg-paper-100 flex flex-col">
+      <Header />
 
       <main className="flex-1">
-        <section className="relative px-4 sm:px-6 lg:px-8 pt-8 pb-16 md:pt-12 md:pb-24">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="dot-title text-4xl sm:text-5xl md:text-7xl text-center text-white mb-2 md:mb-4">
-              sarihnaa
-            </h1>
-
-            <div className="relative -mt-4 md:-mt-8 mb-8 md:mb-12">
-              <ParrotsIllustration />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 items-start max-w-5xl mx-auto">
-              <div className="text-center md:text-right order-2 md:order-1">
-                <p className="text-sage-200 text-sm leading-relaxed mb-4">
-                  Because honesty takes courage,
-                  <br />
-                  we made it anonymous.
-                </p>
-                <div className="font-display text-2xl sm:text-3xl md:text-4xl text-white leading-tight">
-                  <span className="block">500K</span>
-                  <span className="block text-lg sm:text-xl md:text-2xl text-sage-200 font-body font-normal">
-                    Daily Messages
-                  </span>
-                </div>
-              </div>
-
-              <div className="hidden md:block order-2" />
-
-              <div className="text-center md:text-left order-1 md:order-3">
-                <p className="text-sage-200 text-sm leading-relaxed mb-6">
-                  Expect the unexpected.
-                  <br />
-                  Write your secret message now.
-                </p>
+        <section className="paper-grain px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+            <div className="text-center lg:text-left">
+              <p className="text-xs tracking-[0.18em] uppercase text-ochre-700 font-semibold mb-5">
+                An anonymous letterbox
+              </p>
+              <h1 className="font-display text-4xl sm:text-5xl md:text-[3.4rem] text-ink-900 leading-[1.08] text-balance mb-6">
+                Some things are easier to say <em className="italic text-pine-800">on paper.</em>
+              </h1>
+              <p className="text-ink-700 text-base md:text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-9">
+                Write it. Fold it. Send it without your name attached. sarihnaa carries the
+                words people mean but rarely say out loud.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <Link to="/signup" className="btn-primary inline-block px-9 py-3.5 text-sm">
+                  Start writing
+                </Link>
                 <Link
-                  to="/signup"
-                  className="inline-block px-10 py-3.5 bg-sage-100 text-sage-900 rounded-full text-sm font-semibold hover:bg-white transition-all hover:scale-105 shadow-lg"
+                  to="/about"
+                  className="text-sm font-medium text-ink-700 hover:text-pine-800 transition-colors underline decoration-paper-300 underline-offset-4"
                 >
-                  get started
+                  See how it works
                 </Link>
               </div>
+            </div>
+
+            <div>
+              <FoldedNoteIllustration />
             </div>
           </div>
         </section>
 
-        <section className="px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
-          <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
-            <div className="bg-sage-700 rounded-[2rem] p-8 md:p-10 aspect-square flex flex-col items-center justify-center hover:scale-[1.02] transition-transform cursor-pointer group">
-              <KnittingIllustration />
-              <h3 className="mt-6 text-lg font-semibold text-sage-100 group-hover:text-white transition-colors">
-                Sustainable Connections
-              </h3>
-              <p className="mt-2 text-sm text-sage-200 text-center leading-relaxed">
-                Build meaningful anonymous conversations that last.
-              </p>
+        <section className="px-4 sm:px-6 lg:px-8 pb-6">
+          <div className="max-w-4xl mx-auto card-paper rounded-2xl px-8 py-7 flex flex-col sm:flex-row items-center gap-6 sm:gap-10 justify-center text-center sm:text-left">
+            <div className="font-display text-4xl md:text-5xl text-pine-800 leading-none">
+              500,000
             </div>
+            <p className="text-ink-700 text-sm md:text-base leading-relaxed max-w-sm">
+              notes are folded and sent through sarihnaa every day — each one honest,
+              none of them signed.
+            </p>
+          </div>
+        </section>
 
-            <div className="bg-sage-800 rounded-[2rem] p-8 md:p-10 aspect-square flex flex-col items-center justify-center hover:scale-[1.02] transition-transform cursor-pointer group">
-              <PaperPlaneIllustration />
-              <h3 className="mt-6 text-lg font-semibold text-sage-100 group-hover:text-white transition-colors">
-                Send Instantly
-              </h3>
-              <p className="mt-2 text-sm text-sage-200 text-center leading-relaxed">
-                Your message flies straight to its destination, anonymously.
-              </p>
+        <section className="px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="font-display italic text-2xl md:text-3xl text-ink-900 text-center mb-12">
+              How a note travels
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
+              {FEATURES.map((f, i) => (
+                <div key={f.title} className="note-card card-lift p-7">
+                  <span className="font-display italic text-pine-700 text-2xl">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="mt-3 text-base font-semibold text-ink-900">{f.title}</h3>
+                  <p className="mt-2 text-sm text-ink-500 leading-relaxed">{f.body}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>

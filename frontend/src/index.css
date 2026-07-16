@@ -1,17 +1,40 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Quiet Paper — design tokens
+   A warm-paper world: folded notes, steady forest-pine ink,
+   a muted ochre for the second voice (sent vs received).
+   ============================================================ */
 @theme {
-  --color-sage-950: #2a3828;
-  --color-sage-900: #3d5236;
-  --color-sage-800: #4a6354;
-  --color-sage-700: #5a6e52;
-  --color-sage-600: #6b8060;
-  --color-sage-400: #a8b89e;
-  --color-sage-200: #d4ddd0;
-  --color-sage-100: #ececec;
-  --color-sage-50: #f5f7f4;
-  --font-display: "Silkscreen", monospace;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --color-paper-50: #fcfbf8;
+  --color-paper-100: #f5f3ee;
+  --color-paper-200: #eae5d8;
+  --color-paper-300: #d5cdb8;
+  --color-paper-400: #c2b8a0;
+
+  --color-ink-900: #211f16;
+  --color-ink-700: #46422f;
+  --color-ink-500: #726d5f;
+  --color-ink-400: #948f7e;
+
+  --color-pine-950: #0e2620;
+  --color-pine-900: #143530;
+  --color-pine-800: #1b453d;
+  --color-pine-700: #235a4d;
+  --color-pine-600: #2d7362;
+  --color-pine-500: #3c8d78;
+  --color-pine-200: #c3ddd2;
+  --color-pine-100: #e0ede8;
+
+  --color-ochre-700: #7c5a22;
+  --color-ochre-600: #977027;
+  --color-ochre-200: #ecd9ab;
+  --color-ochre-100: #f4e9cf;
+
+  --color-rose-700: #9a4b3f;
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "Work Sans", system-ui, sans-serif;
 }
 
 * {
@@ -25,8 +48,8 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  background-color: var(--color-sage-900);
-  color: white;
+  background-color: var(--color-paper-100);
+  color: var(--color-ink-900);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
@@ -35,57 +58,101 @@ body {
   font-family: var(--font-display);
 }
 
-.dot-title {
-  font-family: var(--font-display);
-  letter-spacing: 0.08em;
-  text-shadow:
-    2px 0 0 rgba(255, 255, 255, 0.15),
-    0 2px 0 rgba(255, 255, 255, 0.1);
+/* Paper grain: a faint ruled/fibrous texture behind hero + card sections */
+.paper-grain {
+  background-image:
+    radial-gradient(rgba(33, 31, 22, 0.05) 0.6px, transparent 0.6px);
+  background-size: 10px 10px;
 }
 
-.auth-gradient {
-  background:
-    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.08), transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(42, 56, 40, 0.6), transparent 50%),
-    linear-gradient(160deg, #3d5236 0%, #2a3828 100%);
+.pine-panel {
+  background: var(--color-pine-900);
+  background-image:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.05), transparent 45%),
+    radial-gradient(circle at 92% 100%, rgba(0, 0, 0, 0.25), transparent 55%);
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.card-paper {
+  background: var(--color-paper-50);
+  border: 1px solid var(--color-paper-300);
+  box-shadow: 0 1px 0 rgba(33, 31, 22, 0.03);
 }
 
-.input-underline {
-  border: none;
-  border-bottom: 1.5px solid #d1d5db;
-  border-radius: 0;
-  background: transparent;
-  padding: 0.75rem 0;
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgba(33, 31, 22, 0.22);
+}
+
+.btn-primary {
+  background: var(--color-pine-800);
+  color: var(--color-paper-50);
+  border-radius: 999px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-pine-700);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-field {
+  border: 1.5px solid var(--color-paper-300);
+  border-radius: 0.6rem;
+  background: var(--color-paper-50);
+  color: var(--color-ink-900);
+  padding: 0.7rem 0.9rem;
   width: 100%;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.input-underline:focus {
-  border-bottom-color: var(--color-sage-900);
+.input-field::placeholder {
+  color: var(--color-ink-400);
+}
+
+.input-field:focus {
+  border-color: var(--color-pine-700);
+  box-shadow: 0 0 0 3px var(--color-pine-100);
 }
 
 .otp-box {
-  width: 3rem;
-  height: 3.5rem;
+  width: 2.9rem;
+  height: 3.4rem;
   text-align: center;
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
   font-weight: 600;
-  border: 1.5px solid #d1d5db;
-  border-radius: 0.75rem;
+  color: var(--color-ink-900);
+  border: 1.5px solid var(--color-paper-300);
+  background: var(--color-paper-50);
+  border-radius: 0.65rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .otp-box:focus {
-  border-color: var(--color-sage-900);
-  box-shadow: 0 0 0 3px rgba(61, 82, 54, 0.15);
+  border-color: var(--color-pine-700);
+  box-shadow: 0 0 0 3px var(--color-pine-100);
+}
+
+/* Message note: a folded-corner card used for message bubbles/list rows */
+.note-card {
+  background: var(--color-paper-50);
+  border: 1px solid var(--color-paper-300);
+  border-radius: 4px 16px 16px 16px;
 }
 
 @keyframes slide-in {
@@ -105,16 +172,31 @@ body {
 
 @keyframes pulse-ring {
   0% {
-    box-shadow: 0 0 0 0 rgba(236, 236, 236, 0.4);
+    box-shadow: 0 0 0 0 rgba(151, 112, 39, 0.35);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(236, 236, 236, 0);
+    box-shadow: 0 0 0 10px rgba(151, 112, 39, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(236, 236, 236, 0);
+    box-shadow: 0 0 0 0 rgba(151, 112, 39, 0);
   }
 }
 
 .notification-pulse {
   animation: pulse-ring 2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -6,3 +6,4 @@ export * from "./multer.utils.js";
 export * from "./nodemailer.utils.js";
 export * from "../index.js";
 export * from "./otp_sendEmail.js";
+export * from "./cookie.utils.js";

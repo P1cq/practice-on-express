@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { getProfile } from '../api/user';
+import { refreshAccessToken } from '../api/client';
+import { setAccessToken, clearAccessToken } from '../api/tokenStore';
 
 const AuthContext = createContext(null);
 
@@ -7,22 +9,12 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const isAuthenticated = !!localStorage.getItem('accessToken');
-
   const fetchProfile = useCallback(async () => {
-    if (!localStorage.getItem('accessToken')) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
-
     try {
       const { data } = await getProfile();
       setUser(data.user);
     } catch {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('userId');
+      clearAccessToken();
       setUser(null);
     } finally {
       setLoading(false);
@@ -30,20 +22,27 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    fetchProfile();
+    // Access tokens live only in memory, so every fresh page load re-derives
+    // the session from the HttpOnly refresh cookie before anything else runs.
+    (async () => {
+      try {
+        await refreshAccessToken();
+        await fetchProfile();
+      } catch {
+        setUser(null);
+        setLoading(false);
+      }
+    })();
   }, [fetchProfile]);
 
-  const loginUser = (tokens, userId) => {
-    localStorage.setItem('accessToken', tokens.accesToken);
-    localStorage.setItem('refreshToken', tokens.refreshToken);
-    localStorage.setItem('userId', userId);
+  const loginUser = (accessToken) => {
+    setAccessToken(accessToken);
+    setLoading(true);
     fetchProfile();
   };
 
   const logoutUser = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userId');
+    clearAccessToken();
     setUser(null);
   };
 
@@ -52,7 +51,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         loading,
-        isAuthenticated,
+        isAuthenticated: !!user,
         loginUser,
         logoutUser,
         refreshProfile: fetchProfile,

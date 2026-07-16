@@ -14,25 +14,30 @@ export const webSocketConnect = function (io) {
   console.log("webSocketConnect: ioInstance initialized");
 
   io.use(async (socket, next) => {
-    const token = socket.handshake.auth.token; // Expect token to be sent from client after login
-    console.log("Received token:", token); // Log the received token
+    try {
+      const token = socket.handshake.auth.token; // Expect token to be sent from client after login
 
-    if (!token) {
-      return next(UnAouthrize(SYS_ERRORS_MESSAGES.user.UnauthorizedToken));
+      if (!token) {
+        return next(new UnAouthrize(SYS_ERRORS_MESSAGES.user.UnauthorizedToken));
+      }
+
+      const decoded = verifyToken(token, env.accessToken);
+
+      const currentUser = await userRepo.getOne({ _id: decoded.sub });
+
+      if (!currentUser) {
+        return next(new NotFound(SYS_ERRORS_MESSAGES.user.notFound));
+      }
+
+      socket.user = currentUser;
+
+      next();
+    } catch (err) {
+      // Any failure here (bad/expired token, DB error, ...) must reject the
+      // socket handshake — it must never escape as an uncaught exception,
+      // which would crash the whole server for every connected user.
+      next(new UnAouthrize(err.message || SYS_ERRORS_MESSAGES.user.UnauthorizedToken));
     }
-
-    const decoded = verifyToken(token, env.accessToken);
-    console.log("Decoded token:", decoded); // Log the decoded token
-
-    const currentUser = await userRepo.getOne(decoded.sub);
-
-    if (!currentUser) {
-      return next(NotFound(SYS_ERRORS_MESSAGES.user.notFound));
-    }
-
-    socket.user = currentUser;
-
-    next();
   });
 
   io.on("connection", (socket) => {

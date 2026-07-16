@@ -2,21 +2,21 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer className="bg-sage-950 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <footer className="bg-paper-200 border-t border-paper-300">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
           <div className="md:col-span-2">
-            <Link to="/" className="font-display text-xl text-sage-100 tracking-wider lowercase">
+            <Link to="/" className="font-display italic text-xl text-ink-900 tracking-wide">
               sarihnaa
             </Link>
-            <p className="mt-4 text-sage-400 text-sm leading-relaxed max-w-md">
-              Because honesty takes courage, we made it anonymous. Share your thoughts freely
-              and receive honest feedback from people who care.
+            <p className="mt-4 text-ink-500 text-sm leading-relaxed max-w-md">
+              Because honesty takes courage, we made it anonymous. Fold your thoughts into a
+              note, send it without a name, and let it find the person it's meant for.
             </p>
-            <div className="flex items-center gap-4 mt-6">
+            <div className="flex items-center gap-3 mt-6">
               <a
                 href="#"
-                className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                className="w-9 h-9 rounded-full bg-paper-50 border border-paper-300 flex items-center justify-center hover:border-pine-700 hover:text-pine-700 transition-colors text-ink-700"
                 aria-label="Twitter"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -25,7 +25,7 @@ export default function Footer() {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                className="w-9 h-9 rounded-full bg-paper-50 border border-paper-300 flex items-center justify-center hover:border-pine-700 hover:text-pine-700 transition-colors text-ink-700"
                 aria-label="Instagram"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -34,7 +34,7 @@ export default function Footer() {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                className="w-9 h-9 rounded-full bg-paper-50 border border-paper-300 flex items-center justify-center hover:border-pine-700 hover:text-pine-700 transition-colors text-ink-700"
                 aria-label="Facebook"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -45,46 +45,46 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-sage-100 mb-4">Explore</h4>
+            <h4 className="text-sm font-semibold text-ink-900 mb-4 tracking-wide">Explore</h4>
             <ul className="space-y-3">
               <li>
-                <Link to="/" className="text-sm text-sage-400 hover:text-white transition-colors">
+                <Link to="/" className="text-sm text-ink-500 hover:text-pine-700 transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-sm text-sage-400 hover:text-white transition-colors">
+                <Link to="/about" className="text-sm text-ink-500 hover:text-pine-700 transition-colors">
                   About
                 </Link>
               </li>
               <li>
-                <Link to="/users" className="text-sm text-sage-400 hover:text-white transition-colors">
-                  Find Users
+                <Link to="/users" className="text-sm text-ink-500 hover:text-pine-700 transition-colors">
+                  Find someone
                 </Link>
               </li>
               <li>
-                <Link to="/signup" className="text-sm text-sage-400 hover:text-white transition-colors">
-                  Get Started
+                <Link to="/signup" className="text-sm text-ink-500 hover:text-pine-700 transition-colors">
+                  Get started
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-sage-100 mb-4">Legal</h4>
+            <h4 className="text-sm font-semibold text-ink-900 mb-4 tracking-wide">Legal</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-sm text-sage-400 hover:text-white transition-colors">
+                <a href="#" className="text-sm text-ink-500 hover:text-pine-700 transition-colors">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-sage-400 hover:text-white transition-colors">
+                <a href="#" className="text-sm text-ink-500 hover:text-pine-700 transition-colors">
                   Terms of Service
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-sage-400 hover:text-white transition-colors">
+                <a href="#" className="text-sm text-ink-500 hover:text-pine-700 transition-colors">
                   Contact Us
                 </a>
               </li>
@@ -92,11 +92,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-sage-400">
+        <div className="mt-12 pt-8 border-t border-paper-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-ink-400">
             &copy; {new Date().getFullYear()} sarihnaa. All rights reserved.
           </p>
-          <p className="text-xs text-sage-400">
+          <p className="text-xs text-ink-400 font-display italic">
             Made with honesty &amp; courage
           </p>
         </div>
