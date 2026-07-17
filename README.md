@@ -9,6 +9,9 @@ real-time notifications when a new one arrives.
 <p align="center">
   <img src="docs/screenshots/home.png" alt="sarihnaa landing page" width="100%" />
 </p>
+<p align="center">
+  <img src="docs/screenshots/features.png" alt="Feature grid on the landing page" width="100%" />
+</p>
 
 <table>
   <tr>
